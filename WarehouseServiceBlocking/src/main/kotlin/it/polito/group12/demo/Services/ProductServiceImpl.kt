@@ -35,4 +35,14 @@ class ProductServiceImpl: ProductService {
 
 
     }
+
+    override fun getProductById(productId: Long): Product? {
+
+        var product = productRepository.findProductByProductId(productId)
+
+        if(product == null) throw Exception("Product not found")
+
+        return product
+
+    }
 }

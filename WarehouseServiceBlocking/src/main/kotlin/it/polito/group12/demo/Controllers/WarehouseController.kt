@@ -76,6 +76,35 @@ class WarehouseController {
     }
 
 
+    @GetMapping(Constants.GET_PRODUCT_BY_ID)
+    fun getProductById(
+        @NotNull @PathVariable productID: Long
+    ): ResponseEntity<Any>?  {
+
+
+        println("Received $productID ")
+
+        //return ResponseEntity<Any>("Done",HttpStatus.OK)
+        return try{
+
+            val product = productService.getProductById(productID)
+
+            println(product)
+
+
+
+            ResponseEntity(product, HttpStatus.OK)
+
+        } catch(ex: Exception){
+            ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+
+        }
+
+
+    }
+
+
+
 
 
 }

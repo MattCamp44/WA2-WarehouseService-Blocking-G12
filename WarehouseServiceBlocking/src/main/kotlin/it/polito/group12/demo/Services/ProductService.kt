@@ -6,5 +6,6 @@ interface ProductService {
 
     fun updateProductQuantity(productId: Long, newQuantity: Long): Product?
 
+    fun getProductById( productId: Long ) : Product?
 
 }
