@@ -1,6 +1,8 @@
 package it.polito.group12.demo.Utils
 
 class Constants {
+
+
     companion object{
         const val ADD_PRODUCT = "/products"
         const val UPDATE_QUANTITY = "/products/{product_Id}"

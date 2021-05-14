@@ -9,7 +9,7 @@ class Product {
 
     @Id
     @GeneratedValue
-    var product_id: Long? = null
+    var productId: Long? = null
 
     @Column(length = 100)
     var name: String? = null
