@@ -40,11 +40,12 @@ class WarehouseController {
 
             product.productId = null
             product.name =  productDTO.name!!
-            product.category_id = Category()
-            product.category_id = categoryrepository.findCategoryByCategoryId(productDTO.categoryId!!)
+            product.categoryId = Category()
+            product.categoryId = categoryrepository.findCategoryByCategoryId(productDTO.categoryId!!)
             product.price = productDTO.price!!
             product.quantity = productDTO.quantity!!
 
+            if( product.categoryId == null ) throw Exception("Category does not exist")
 
             ResponseEntity(productRepository.save(product), HttpStatus.CREATED)
 
@@ -126,6 +127,29 @@ class WarehouseController {
 
 
     }
+
+    @GetMapping( Constants.PRODUCTS_BY_CATEGORY)
+    fun getProductsByCategory( @RequestParam(name="category") categoryName : String? ):  ResponseEntity<Any>?
+    {
+
+        return try{
+
+            var productsList : List<Product> = productService.getProductsByCategory(categoryName!!)
+
+            ResponseEntity(productsList,HttpStatus.OK)
+
+        }catch(ex: Exception){
+
+            ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+
+        }
+
+
+
+
+    }
+
+
 
 
 

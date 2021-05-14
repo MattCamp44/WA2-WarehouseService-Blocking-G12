@@ -11,5 +11,7 @@ interface Categoryrepository : CrudRepository<Category, Long> {
 
     fun findCategoryByCategoryId(categoryId: Long) : Category?
 
+    fun findCategoryByName( categoryName: String ) : Category?
+
 
 }

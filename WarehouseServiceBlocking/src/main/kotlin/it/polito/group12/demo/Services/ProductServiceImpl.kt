@@ -1,6 +1,7 @@
 package it.polito.group12.demo.Services
 
 import it.polito.group12.demo.Domain.Product
+import it.polito.group12.demo.Repositories.Categoryrepository
 import it.polito.group12.demo.Repositories.ProductRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -12,6 +13,9 @@ class ProductServiceImpl: ProductService {
 
     @Autowired
     lateinit var productRepository: ProductRepository
+
+    @Autowired
+    lateinit var categoryrepository: Categoryrepository
 
     override fun updateProductQuantity(productId: Long,  newQuantity: Long): Product? {
 
@@ -49,6 +53,17 @@ class ProductServiceImpl: ProductService {
     override fun getAllProducts(): List<Product> {
 
         return productRepository.findAll()
+
+
+    }
+
+    override fun getProductsByCategory(categoryName: String?): List<Product> {
+
+        val categoryId =  categoryrepository.findCategoryByName(categoryName!!)
+
+        if (categoryId == null) throw Exception("Category not found")
+
+        return productRepository.findProductByCategoryId(categoryId!!)
 
 
     }

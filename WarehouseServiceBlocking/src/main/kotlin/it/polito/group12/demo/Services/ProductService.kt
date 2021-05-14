@@ -10,4 +10,6 @@ interface ProductService {
 
     fun getAllProducts(): List<Product>
 
+    fun getProductsByCategory(categoryName: String?): List<Product>
+
 }

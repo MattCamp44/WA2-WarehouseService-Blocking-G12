@@ -17,7 +17,7 @@ class Product {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId" , referencedColumnName = "categoryId")
-    var category_id: Category? = null
+    var categoryId: Category? = null
 
     @Column
     var price: BigDecimal? = null
