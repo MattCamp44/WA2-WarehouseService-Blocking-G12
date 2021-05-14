@@ -45,4 +45,11 @@ class ProductServiceImpl: ProductService {
         return product
 
     }
+
+    override fun getAllProducts(): List<Product> {
+
+        return productRepository.findAll()
+
+
+    }
 }

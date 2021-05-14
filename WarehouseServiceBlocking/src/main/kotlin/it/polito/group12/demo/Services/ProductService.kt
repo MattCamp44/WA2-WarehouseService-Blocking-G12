@@ -8,4 +8,6 @@ interface ProductService {
 
     fun getProductById( productId: Long ) : Product?
 
+    fun getAllProducts(): List<Product>
+
 }

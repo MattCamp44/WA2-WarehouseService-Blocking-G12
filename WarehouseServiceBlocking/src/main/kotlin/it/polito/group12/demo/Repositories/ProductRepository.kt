@@ -9,6 +9,8 @@ interface ProductRepository: CrudRepository<Product, Long> {
 
     fun findProductByProductId(productId: Long) : Product?
 
+    override fun findAll(): List<Product>
+
 
 
 

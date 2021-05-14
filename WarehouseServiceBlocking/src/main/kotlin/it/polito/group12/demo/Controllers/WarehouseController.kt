@@ -105,6 +105,29 @@ class WarehouseController {
 
 
 
+    @GetMapping(Constants.GET_ALL_PRODUCTS)
+    fun getAllProducts() : ResponseEntity<Any>?{
+
+        return try{
+            var allProductList : List<Product> = productService.getAllProducts()
+
+             ResponseEntity(allProductList,HttpStatus.OK)
+
+
+        } catch(ex: Exception){
+
+            ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+
+        }
+
+
+
+
+
+
+    }
+
+
 
 
 }
