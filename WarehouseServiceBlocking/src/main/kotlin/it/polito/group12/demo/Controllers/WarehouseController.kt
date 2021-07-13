@@ -7,6 +7,7 @@ import com.sun.istack.NotNull
 import it.polito.group12.demo.Domain.Category
 import it.polito.group12.demo.Domain.Product
 import it.polito.group12.demo.Dtos.ProductDTO
+import it.polito.group12.demo.Dtos.UpdateQuantityRequestBodyDTO
 import it.polito.group12.demo.Repositories.Categoryrepository
 import it.polito.group12.demo.Repositories.ProductRepository
 import it.polito.group12.demo.Services.ProductService
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 
 
@@ -24,56 +26,68 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/warehouse")
 class WarehouseController {
 
-    @Autowired
-    lateinit var productRepository: ProductRepository
 
-    @Autowired
-    lateinit var categoryrepository: Categoryrepository
 
     @Autowired
     lateinit var productService: ProductService
 
     @PostMapping(Constants.ADD_PRODUCT)
-    fun addNewProduct(@RequestBody productDTO: ProductDTO): ResponseEntity<Any> {
+    fun addNewProduct(@RequestBody productDTO: ProductDTO , bindingResult: BindingResult): ResponseEntity<Any> {
         return try {
+
+            if(bindingResult.hasErrors()){
+
+                throw Exception("Bad request body")
+
+            }
+
             val product = Product()
 
             product.productId = null
             product.name =  productDTO.name!!
             product.categoryId = Category()
-            product.categoryId = categoryrepository.findCategoryByCategoryId(productDTO.categoryId!!)
+            product.categoryId = productService.getProductBYCategoryId(productDTO.categoryId!!)
             product.price = productDTO.price!!
             product.quantity = productDTO.quantity!!
 
             if( product.categoryId == null ) throw Exception("Category does not exist")
 
-            ResponseEntity(productRepository.save(product), HttpStatus.CREATED)
+            ResponseEntity( productService.addProduct(product) , HttpStatus.CREATED)
 
         } catch (ex: Exception) {
-            ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+
+            if(ex.message == "Category does not exist") {
+                ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
+            }
+            else
+                ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
         }
     }
 
     @PatchMapping(Constants.UPDATE_QUANTITY, MediaType.APPLICATION_JSON_VALUE)
     fun updateQuantity(@PathVariable product_Id: Long,
-                                 @RequestBody requestBody: String?  ):
+                                 @RequestBody requestBody: UpdateQuantityRequestBodyDTO , bindingResult: BindingResult ):
             ResponseEntity<Any>? {
-        println("Here")
 
         return try {
 
 
-            val body: JsonObject = Gson().fromJson(requestBody, JsonObject::class.java)
+            //val body: JsonObject = Gson().fromJson(requestBody, JsonObject::class.java)
 
-            var newQuantity: Long = body.get("newQuantity").asLong
+            //var newQuantity: Long = body.get("newQuantity").asLong
+                var newQuantity = requestBody.newQuantity
 
-            println(newQuantity)
 
-            val product = productService.updateProductQuantity(product_Id, newQuantity!!)
-            ResponseEntity(product, HttpStatus.OK)
-        } catch (ex: Exception) {
-            ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
-        }
+                println(newQuantity)
+
+                val product = productService.updateProductQuantity(product_Id, newQuantity!!)
+                ResponseEntity(product, HttpStatus.OK)
+            } catch (ex: Exception) {
+                ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+            }
+
+
+
     }
 
 

@@ -1,6 +1,8 @@
 package it.polito.group12.demo.Services
 
+import it.polito.group12.demo.Domain.Category
 import it.polito.group12.demo.Domain.Product
+import it.polito.group12.demo.Dtos.ProductDTO
 
 interface ProductService {
 
@@ -11,5 +13,9 @@ interface ProductService {
     fun getAllProducts(): List<Product>
 
     fun getProductsByCategory(categoryName: String?): List<Product>
+
+    fun getProductBYCategoryId(categoryId : Long?) : Category?
+
+    fun addProduct(product: Product) : Product?
 
 }

@@ -1,5 +1,6 @@
 package it.polito.group12.demo.Services
 
+import it.polito.group12.demo.Domain.Category
 import it.polito.group12.demo.Domain.Product
 import it.polito.group12.demo.Repositories.Categoryrepository
 import it.polito.group12.demo.Repositories.ProductRepository
@@ -67,4 +68,17 @@ class ProductServiceImpl: ProductService {
 
 
     }
+
+    override fun getProductBYCategoryId(categoryId: Long?): Category? {
+
+        return categoryrepository.findCategoryByCategoryId(categoryId!!)
+
+
+    }
+
+
+    override fun addProduct(product: Product): Product? {
+        return productRepository.save(product)
+    }
+
 }
